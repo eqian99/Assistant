@@ -21,7 +21,7 @@ def start():
 
     try:
         mode = request.args["mode"]
-        image = request.form.get("image_url") # request.form["image_url"]
+        image = request.form.get("image")
         # image = request.files['image']
         # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
         # image.save(filename)
@@ -50,7 +50,7 @@ def describeFaces():
 
 
 # Compare Azure and IBM Watson captioning
-def captionImage(image_url):
+def captionImage(image):
     """
     Input: Image
     Output: JSON, with info
@@ -58,7 +58,7 @@ def captionImage(image_url):
     """
     vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v2.0/"
 
-    describe_url = vision_base_url + "describe"
+    analyze_url = vision_base_url + "analyze"
 
     headers = {
         # Request headers
@@ -72,17 +72,16 @@ def captionImage(image_url):
         'language': 'en',
     })
 
-    body = {"url": image_url}
-
     try:
-        response = requests.post(describe_url, headers=headers, params=params, data=body)
+        response = requests.post(analyze_url, headers=headers, params=params, data=image)
         response.raise_for_status()
-        data = response.read()
-        print(data)
+        analysis = response.json()
+        print(analysis)
+        image_caption = analysis["description"]["captions"][0]["text"].capitalize()
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-    json = {}
+    json = {'result': image_caption}
     return jsonify(json)
 
 if __name__ == "__main__":
