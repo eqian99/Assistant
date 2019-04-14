@@ -13,15 +13,15 @@
 </header>
 
 
-<form action="/upload" method="post" enctype="multipart/form-data" >
+<form action="/" method="post" enctype="multipart/form-data" >
     <label class="btn btn-default btn-file">
-        Browse <input <input type="file" name="image" style="display: none;">
+        Browse <input type="file" name="image" style="display: none;">
     </label>
     <input type="submit" value="Upload your image" class="btn btn-primary">
 </form>
 
 <div class="text-center">
-    {% if init %}
+    <!-- {% if init %}
         {% if invalidImage %}
             <div class="alert alert-danger" style="margin-top:18px;">
                 <strong>Error</strong> Your image contain invalid content !
@@ -31,7 +31,7 @@
                 <strong>Success!</strong> Your image was upload successfully
             </div>
         {% endif %}
-    {% endif %}
+    {% endif %} -->
 </div>
 
 </body>
