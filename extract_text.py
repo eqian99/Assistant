@@ -6,7 +6,7 @@ from matplotlib.patches import Rectangle
 class ExtractText:
     def __init__(self, image):
         # Subscription Key for Computer Vision API
-        subscription_key = '9a801624fab842b8867b963ecc5f151f'
+        subscription_key = 'b000344e5c6045f4988a50daeedf0b75'
         assert subscription_key
 
         self.image = image

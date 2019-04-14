@@ -5,7 +5,7 @@ import operator
 class EmotionAzure:
     def __init__(self, image):
         # Subscription Key for Faces API
-        subscription_key = '9193e2d12cb2422f8c17b8101e64a8f4'
+        subscription_key = '841408a0ac374e7aa7d02db449f5d4df'
         assert subscription_key
 
         self.image = image
