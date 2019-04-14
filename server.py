@@ -14,6 +14,7 @@ _url = 'https://{}.api.cognitive.microsoft.com/vision/v2.0/analyze'.format(_regi
 _key = '9a801624fab842b8867b963ecc5f151f'
 _maxNumRetries = 10
 
+
 @app.route('/', methods=['POST'])
 def start():
     # js = json.loads(request.data.decode('utf-8'))
@@ -39,6 +40,7 @@ def start():
     else:
         return jsonify({"result": "Error: mode not recognized"})
 
+
 def describeFaces():
     """
     Input: Image
@@ -60,20 +62,32 @@ def captionImage(image):
 
     analyze_url = vision_base_url + "analyze"
 
-    headers = {
+    # https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/quickstarts/python-analyze
+    url_headers = {
         # Request headers
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/octet-stream',
         'Ocp-Apim-Subscription-Key': _key,
     }
 
-    params = urllib.parse.urlencode({
+    url_params = urllib.parse.urlencode({
         # Request parameters
         'maxCandidates': '1',
         'language': 'en',
     })
 
+    # https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/quickstarts/python-disk
+    binary_headers = {
+        'Content-Type': 'application/octet-stream',
+        'Ocp-Apim-Subscription-Key': _key,
+    }
+
+    binary_params = {'visualFeatures': 'Categories,Description,Color'}
+
     try:
-        response = requests.post(analyze_url, headers=headers, params=params, data=image)
+        # if image is binary:
+        response = requests.post(analyze_url, headers=binary_headers, params=binary_params, data=image)
+        # if image is url:
+        # response = requests.post(analyze_url, headers=url_headers, params=url_params, data=image)
         response.raise_for_status()
         analysis = response.json()
         print(analysis)
@@ -83,6 +97,7 @@ def captionImage(image):
 
     json = {'result': image_caption}
     return jsonify(json)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
