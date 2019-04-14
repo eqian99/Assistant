@@ -38,6 +38,9 @@ def start():
             if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
                 result['_result'] += facesData['_result']
                 result['faceResponse'] = facesData['response']
+    except:
+        pass
+    try:
         if request.args["ocr"] == 'true':
             textData = extractText(image2)
             result['_result'] += textData['_result']
