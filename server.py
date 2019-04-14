@@ -22,8 +22,8 @@ def start():
 
     try:
         mode = request.args["mode"]
-        image = request.form.get("image")
-        # image = request.files['image']
+        image = request.files['image']
+        print(image)
         # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
         # image.save(filename)
     except Exception as e:
@@ -62,19 +62,6 @@ def captionImage(image):
 
     analyze_url = vision_base_url + "analyze"
 
-    # https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/quickstarts/python-analyze
-    url_headers = {
-        # Request headers
-        'Content-Type': 'application/octet-stream',
-        'Ocp-Apim-Subscription-Key': _key,
-    }
-
-    url_params = urllib.parse.urlencode({
-        # Request parameters
-        'maxCandidates': '1',
-        'language': 'en',
-    })
-
     # https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/quickstarts/python-disk
     binary_headers = {
         'Content-Type': 'application/octet-stream',
@@ -83,15 +70,19 @@ def captionImage(image):
 
     binary_params = {'visualFeatures': 'Categories,Description,Color'}
 
+    # # Set image_path to the local path of an image that you want to analyze.
+    # image_path = "/Users/haoyuyun/Downloads/IMG_0795.JPG"
+    # # Read the image into a byte array
+    # image_data = open(image_path, "rb").read()
+
     try:
         # if image is binary:
         response = requests.post(analyze_url, headers=binary_headers, params=binary_params, data=image)
-        # if image is url:
-        # response = requests.post(analyze_url, headers=url_headers, params=url_params, data=image)
         response.raise_for_status()
         analysis = response.json()
         print(analysis)
         image_caption = analysis["description"]["captions"][0]["text"].capitalize()
+        print(image_caption)
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
