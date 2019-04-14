@@ -7,7 +7,7 @@ class EmotionAzure:
         subscription_key = '9193e2d12cb2422f8c17b8101e64a8f4'
         assert subscription_key
 
-        # TODO: Change to send binary image data, instead of url of image (see server/captionImages() function for reference)
+        # TODO: Change to send binary image data, instead of url of image (see caption_image.py for reference)
         if image_url == None: 
             image_url = 'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg'
         self.image_url = image_url
@@ -51,8 +51,11 @@ class EmotionAzure:
         age_gender = getAgeGender(age, gender)
         exposure_descr = print(getExposureDescription (exposure_state))
         occlusion_descr = print(getOcclusion (foreheadOcclusion))
+
+        # TODO: Any other ideas? :)
         
         description = ' '.join([age_gender, exposure_descr, occlusion_descr])
         output = {"result": description, "confidence": confidence}
         # print(json.dumps(response.json()))
+
         return output
