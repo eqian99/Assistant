@@ -2,6 +2,7 @@ argparse
 dill
 fire
 matplotlib
+PIL
 numba
 psutil
 requests

@@ -33,7 +33,6 @@ def start():
         captionData = captionImage(image)
         result['_result'] += captionData['_result']
     try:
-        print(request.files.get('image'))
         if request.args["faces"] == 'true':
             facesData = detectEmotion(image)
             if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
