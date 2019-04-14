@@ -8,5 +8,5 @@ requests
 slidingwindow
 tqdm
 Flask
+gunicorn
 urllib3
-git+https://github.com/ppwwyyxx/tensorpack.git
