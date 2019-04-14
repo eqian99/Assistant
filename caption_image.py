@@ -1,4 +1,5 @@
 import requests
+import json
 
 class CaptionImage:
     def __init__(self, image):
@@ -21,7 +22,6 @@ class CaptionImage:
 
 
     def captionImage(self):
-
         # # Set image_path to the local path of an image that you want to analyze.
         # image_path = "/Users/haoyuyun/Downloads/IMG_0795.JPG"
         # # Read the image into a byte array
@@ -38,5 +38,5 @@ class CaptionImage:
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        output = {'result': image_caption}
+        output = {'_result': image_caption, 'response': analysis}
         return output

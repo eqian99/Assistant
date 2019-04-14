@@ -55,7 +55,7 @@ class EmotionAzure:
         # TODO: Any other ideas? :)
         
         description = ' '.join([age_gender, exposure_descr, occlusion_descr])
-        output = {"result": description, "confidence": confidence}
+        output = {'_result': description, 'confidence': confidence, 'response': response}
         # print(json.dumps(response.json()))
 
         return output

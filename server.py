@@ -34,13 +34,15 @@ def start():
         return captionImage(image)
     elif mode == "faces":
         return describeFaces(image)
+    elif mode == "ocr":
+        return extractText(image)
     elif mode == "test":
         return jsonity({"result": "Success!"})
     else:
         return jsonify({"result": "Error: mode not recognized"})
 
 
-def describeFaces():
+def describeFaces(image):
     """
     Input: Image binary data
     Output: JSON, with info
@@ -50,7 +52,7 @@ def describeFaces():
     return jsonify(json)
 
 
-def extractText():
+def extractText(image):
     """
     Input: Image binary data, to perform OCR on
     Output: JSON, with info
