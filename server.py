@@ -17,9 +17,10 @@ def start():
     """
     POST endpoint to receive from app
     """
-    FACE_CONFIDENCE_THRESHOLD = 0.8
+    FACE_CONFIDENCE_THRESHOLD = 0
     try:
         image = request.files.get('image')
+        image2 = request.files.get('image')
         if request.args["test"] == 'true':
             return jsonify({"_result": "Test mode on. Server received your image!"})
     except Exception as e:
@@ -35,8 +36,9 @@ def start():
         facesData = detectEmotion(image)
         if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
             result['_result'] += facesData['_result']
+            result['faceResponse'] = facesData['response']
     if request.args["ocr"] == 'true':
-        textData = extractText(image)
+        textData = extractText(image2)
         result['_result'] += textData['_result']
     return jsonify(result)
 

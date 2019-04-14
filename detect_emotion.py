@@ -2,19 +2,19 @@ import requests
 import json
 
 class EmotionAzure:
-    def __init__(self, image_url=None):
+    def __init__(self, image):
         # Subscription Key for Faces API
         subscription_key = '9193e2d12cb2422f8c17b8101e64a8f4'
         assert subscription_key
 
-        # TODO: Change to send binary image data, instead of url of image (see caption_image.py for reference)
-        if image_url == None: 
-            image_url = 'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg'
-        self.image_url = image_url
+        self.image = image
 
         self.face_api_url = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect'
         
-        self.headers = { 'Ocp-Apim-Subscription-Key': subscription_key }
+        self.headers = {
+            'Content-Type': 'application/octet-stream',
+            'Ocp-Apim-Subscription-Key': subscription_key
+        }
 
         self.params = {
             'returnFaceId': 'true',
@@ -23,39 +23,45 @@ class EmotionAzure:
         }
 
     def analyzeFace(self):
-        response = requests.post(self.face_api_url, params=self.params, headers=self.headers, json={"url": self.image_url})
-        age = str(int(response.json()[0]['faceAttributes']['age']))
-        gender = response.json()[0]['faceAttributes']['gender']
-        exposure_state = response.json()[0]['faceAttributes']['exposure']['exposureLevel']
-        foreheadOcclusion = response.json()[0]['faceAttributes']['occlusion']['foreheadOccluded']
+        response = requests.post(self.face_api_url, headers=self.headers, params=self.params, data=self.image)
+        response.raise_for_status()
+        analysis = response.json()
         # TODO: Get confidence that there is a face
         confidence = 0
+        description = ""
 
-        def getAgeGender (age, gender):
-            return "The subject pictured is a " + age + " year old " + gender + "."
+        try:
+            age = str(int(response.json()[0]['faceAttributes']['age']))
+            gender = response.json()[0]['faceAttributes']['gender']
+            exposure_state = response.json()[0]['faceAttributes']['exposure']['exposureLevel']
+            foreheadOcclusion = response.json()[0]['faceAttributes']['occlusion']['foreheadOccluded']
 
-        def getExposureDescription (exposure_state):
-            if exposure_state == 'UnderExposure':
-                return "The camera is under exposed. Please turn up the exposure."
-            elif exposure_state == 'OverExposure':
-                return "The camera is over exposed. Please turn up the exposure."
-            else:
-                return ""
+            def getAgeGender (age, gender):
+                return "The subject pictured is a " + age + " year old " + gender + "."
 
-        def getOcclusion (foreheadOcclusion):
-            if foreheadOcclusion:
-                return "The subject's forehead is occluded. Please angle the camera down."
-            else:
-                return ""
+            def getExposureDescription (exposure_state):
+                if exposure_state == 'UnderExposure':
+                    return "The camera is under exposed. Please turn up the exposure."
+                elif exposure_state == 'OverExposure':
+                    return "The camera is over exposed. Please turn up the exposure."
+                else:
+                    return ""
 
-        age_gender = getAgeGender(age, gender)
-        exposure_descr = print(getExposureDescription (exposure_state))
-        occlusion_descr = print(getOcclusion (foreheadOcclusion))
+            def getOcclusion (foreheadOcclusion):
+                if foreheadOcclusion:
+                    return "The subject's forehead is occluded. Please angle the camera down."
+                else:
+                    return ""
 
-        # TODO: Any other ideas? :)
-        
-        description = ' '.join([age_gender, exposure_descr, occlusion_descr])
-        output = {'_result': description, 'confidence': confidence, 'response': response}
+            age_gender = getAgeGender(age, gender)
+            exposure_descr = print(getExposureDescription (exposure_state))
+            occlusion_descr = print(getOcclusion (foreheadOcclusion))
+
+            description = ' '.join([age_gender, exposure_descr, occlusion_descr])
+        except:
+            pass
+
+        output = {'_result': description, 'confidence': confidence, 'response': analysis}
         # print(json.dumps(response.json()))
 
         return output
