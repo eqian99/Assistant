@@ -42,7 +42,7 @@ class EmotionAzure:
                 return ""
 
         def getEmotion(emotion):
-            return "They are {}.".format(emotion)
+            return "The subject looks {}.".format(emotion)
                 
         response = requests.post(self.face_api_url, headers=self.headers, params=self.params, data=self.image)
         # response.raise_for_status()
