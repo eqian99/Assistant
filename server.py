@@ -6,6 +6,7 @@ import os
 import requests
 from detect_emotion import EmotionAzure
 from caption_image import CaptionImage
+from extract_text import ExtractText
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 
 app = Flask(__name__)
@@ -49,13 +50,14 @@ def describeFaces():
     return jsonify(json)
 
 
-def ocr():
+def extractText():
     """
-    Input: Image binary data
+    Input: Image binary data, to perform OCR on
     Output: JSON, with info
     e.g. {"result": "anclsaknlasfasf", "confidence": 0.42}
     """
-
+    json = ExtractText(image).extractText()
+    return jsonify(json)
 
 
 # Compare Azure and IBM Watson captioning

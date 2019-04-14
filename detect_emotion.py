@@ -11,7 +11,7 @@ class EmotionAzure:
         if image_url == None: 
             image_url = 'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg'
         self.image_url = image_url
-        
+
         self.face_api_url = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect'
         
         self.headers = { 'Ocp-Apim-Subscription-Key': subscription_key }
@@ -32,13 +32,13 @@ class EmotionAzure:
         confidence = 0
 
         def getAgeGender (age, gender):
-            return "The subject pictured is a " + age + " year old " + gender
+            return "The subject pictured is a " + age + " year old " + gender + "."
 
         def getExposureDescription (exposure_state):
             if exposure_state == 'UnderExposure':
-                return "The camera is under exposed. Please turn up the exposure. "
+                return "The camera is under exposed. Please turn up the exposure."
             elif exposure_state == 'OverExposure':
-                return "The camera is over exposed. Please turn up the exposure. "
+                return "The camera is over exposed. Please turn up the exposure."
             else:
                 return ""
 
@@ -51,7 +51,8 @@ class EmotionAzure:
         age_gender = getAgeGender(age, gender)
         exposure_descr = print(getExposureDescription (exposure_state))
         occlusion_descr = print(getOcclusion (foreheadOcclusion))
-        description = description
-        info = {"result": description, "confidence": confidence}
+        
+        description = ' '.join([age_gender, exposure_descr, occlusion_descr])
+        output = {"result": description, "confidence": confidence}
         # print(json.dumps(response.json()))
-        return info
+        return output

@@ -1,5 +1,4 @@
 import requests
-import json
 
 class CaptionImage:
     def __init__(self, image):
@@ -39,6 +38,5 @@ class CaptionImage:
         except Exception as e:
             print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-        json = {'result': image_caption}
-        return json
-        
+        output = {'result': image_caption}
+        return output
