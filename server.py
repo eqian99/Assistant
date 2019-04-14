@@ -20,7 +20,6 @@ def start():
     FACE_CONFIDENCE_THRESHOLD = 0
     try:
         image = request.files.get('image')
-        image2 = request.files.get('image')
         if request.args["test"] == 'true':
             return jsonify({"_result": "Test mode on. Server received your image!"})
     except Exception as e:
@@ -28,11 +27,13 @@ def start():
         return jsonify({"result": "Error: request reading failed"})
 
     result = {'_result': ""}
+    print(request.files.get('image')) 
     # Do something depending on mode
     if request.args["caption"] == 'true':
         captionData = captionImage(image)
         result['_result'] += captionData['_result']
     try:
+        print(request.files.get('image'))
         if request.args["faces"] == 'true':
             facesData = detectEmotion(image)
             if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
@@ -76,7 +77,7 @@ def captionImage(image):
     """
     Input: Image
     Output: Dict with info
-    e.g. {"result": "a red fox in a green field", "confidence": 88.5, "other stuff".....}
+    e.g. {"result": "a red fox in a green field", "confidence": 0.885, "other stuff".....}
     """
     json = CaptionImage(image).captionImage()
     return json
