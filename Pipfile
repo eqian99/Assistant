@@ -9,6 +9,18 @@ verify_ssl = true
 requests = "*"
 torch = "*"
 torchvision = "*"
+flask = "*"
+argparse = "*"
+dill = "*"
+fire = "*"
+matplotlib = "*"
+numba = "*"
+psutil = "*"
+pycocotools = "*"
+scikit-image = "*"
+scipy = "*"
+slidingwindow = "*"
+tqdm = "*"
 
 [requires]
 python_version = "3.7"
