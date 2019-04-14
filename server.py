@@ -2,6 +2,7 @@
 
 from flask import Flask, request, jsonify, render_template
 import json
+import copy
 import os
 import requests
 from detect_emotion import EmotionAzure
@@ -31,7 +32,7 @@ def start():
         captionData = captionImage(image)
         result['_result'] += captionData['_result']
     if request.args["faces"] == 'true':
-        facesData = describeFaces(image)
+        facesData = detectEmotion(image)
         if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
             result['_result'] += facesData['_result']
     if request.args["ocr"] == 'true':

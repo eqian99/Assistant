@@ -30,12 +30,14 @@ class ExtractText:
         Takes binary image and returns extracted text via OCR
         Currently only returns text if 'language' detected as 'en'
         """
-        extracted_text = None
+        extracted_text = ''
+        analysis = {}
         try:
             response = requests.post(self.ocr_url, headers=self.headers, params=self.params, data=self.image)
             response.raise_for_status()
             analysis = response.json()
 
+            print(analysis)
             if analysis["language"] == "en":
                 # Extract the word bounding boxes and text.
                 line_infos = [region["lines"] for region in analysis["regions"]]
