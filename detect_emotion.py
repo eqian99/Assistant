@@ -7,12 +7,12 @@ class EmotionAzure:
         subscription_key = '9193e2d12cb2422f8c17b8101e64a8f4'
         assert subscription_key
 
-        self.face_api_url = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect'
-
         # TODO: Change to send binary image data, instead of url of image (see server/captionImages() function for reference)
         if image_url == None: 
             image_url = 'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg'
         self.image_url = image_url
+        
+        self.face_api_url = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect'
         
         self.headers = { 'Ocp-Apim-Subscription-Key': subscription_key }
 
@@ -29,7 +29,7 @@ class EmotionAzure:
         exposure_state = response.json()[0]['faceAttributes']['exposure']['exposureLevel']
         foreheadOcclusion = response.json()[0]['faceAttributes']['occlusion']['foreheadOccluded']
         # TODO: Get confidence that there is a face
-        confidence = ???
+        confidence = 0
 
         def getAgeGender (age, gender):
             return "The subject pictured is a " + age + " year old " + gender
