@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, render_template
 import json
 import os
 import requests
+from emotion_azure import EmotionAzure
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 
 app = Flask(__name__)
@@ -22,8 +23,7 @@ def start():
 
     try:
         mode = request.args["mode"]
-        image = request.files['image']
-        print(image)
+        image = request.files.get('image')
         # filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
         # image.save(filename)
     except Exception as e:
@@ -43,11 +43,12 @@ def start():
 
 def describeFaces():
     """
-    Input: Image
+    Input: Image binary data
     Output: JSON, with info
     e.g. {"result": "two people: one is 80% happy, two is 72% sad"}
     """
-    json = {}
+    ea = EmotionAzure(image)
+    json = ea.analyzeFace()
     return jsonify(json)
 
 
