@@ -39,7 +39,8 @@ def getOcclusion (foreheadOcclusion):
     else:
         return ""
 
-print(getAgeGender(age, gender))
-print(getExposureDescription (exposure_state))
-print(getOcclusion (foreheadOcclusion))
+age_gender = getAgeGender(age, gender)
+exposure_descr = print(getExposureDescription (exposure_state))
+occlusion_descr = print(getOcclusion (foreheadOcclusion))
+info = {"result": age_gender + exposure_descr + occlusion_descr}
 # print(json.dumps(response.json()))
