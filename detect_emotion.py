@@ -45,7 +45,7 @@ class EmotionAzure:
             return "They are {}.".format(emotion)
                 
         response = requests.post(self.face_api_url, headers=self.headers, params=self.params, data=self.image)
-        response.raise_for_status()
+        # response.raise_for_status()
         analysis = response.json()
         description = ""
         confidence = 1

@@ -20,7 +20,7 @@ def start():
     FACE_CONFIDENCE_THRESHOLD = 0
     try:
         image = request.files.get('image')
-        if request.args["test"] == 'true':
+        if request.args.get("test", "true") == 'true':
             return jsonify({"_result": "Test mode on. Server received your image!"})
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -29,11 +29,11 @@ def start():
     result = {'_result': ""}
     print(request.files.get('image')) 
     # Do something depending on mode
-    if request.args["caption"] == 'true':
+    if request.args.get("caption", "true") == 'true':
         captionData = captionImage(image)
         result['_result'] += captionData['_result']
     try:
-        if request.args["faces"] == 'true':
+        if request.args.get("faces", "false") == 'true':
             facesData = detectEmotion(image)
             if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
                 result['_result'] += facesData['_result']
@@ -41,7 +41,7 @@ def start():
     except:
         pass
     try:
-        if request.args["ocr"] == 'true':
+        if request.args.get("ocr", "false") == 'true':
             textData = extractText(image2)
             result['_result'] += textData['_result']
     except:

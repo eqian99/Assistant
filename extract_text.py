@@ -2,8 +2,6 @@ import requests
 import json
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-# from PIL import Image
-# from io import BytesIO
 
 class ExtractText:
     def __init__(self, image):
@@ -34,7 +32,7 @@ class ExtractText:
         analysis = {}
         try:
             response = requests.post(self.ocr_url, headers=self.headers, params=self.params, data=self.image)
-            response.raise_for_status()
+            # response.raise_for_status()
             analysis = response.json()
 
             print(analysis)
