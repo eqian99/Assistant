@@ -1,5 +1,6 @@
 import requests
 import json
+import operator
 
 class EmotionAzure:
     def __init__(self, image):
@@ -23,45 +24,48 @@ class EmotionAzure:
         }
 
     def analyzeFace(self):
+        def getAgeGender (age, gender):
+            return "The subject looks like a " + age + " year old " + gender + "."
+
+        def getExposureDescription (exposure_state):
+            if exposure_state == 'UnderExposure':
+                return "The camera is under exposed."
+            elif exposure_state == 'OverExposure':
+                return "The camera is over exposed."
+            else:
+                return ""
+
+        def getOcclusion (foreheadOcclusion):
+            if foreheadOcclusion:
+                return "Their forehead is occluded. Please angle the camera down."
+            else:
+                return ""
+
+        def getEmotion(emotion):
+            return "They are {}.".format(emotion)
+                
         response = requests.post(self.face_api_url, headers=self.headers, params=self.params, data=self.image)
         response.raise_for_status()
         analysis = response.json()
-        # TODO: Get confidence that there is a face
-        confidence = 0
         description = ""
+        confidence = 1
 
-        try:
-            age = str(int(response.json()[0]['faceAttributes']['age']))
-            gender = response.json()[0]['faceAttributes']['gender']
-            exposure_state = response.json()[0]['faceAttributes']['exposure']['exposureLevel']
-            foreheadOcclusion = response.json()[0]['faceAttributes']['occlusion']['foreheadOccluded']
-
-            def getAgeGender (age, gender):
-                return "The subject pictured is a " + age + " year old " + gender + "."
-
-            def getExposureDescription (exposure_state):
-                if exposure_state == 'UnderExposure':
-                    return "The camera is under exposed. Please turn up the exposure."
-                elif exposure_state == 'OverExposure':
-                    return "The camera is over exposed. Please turn up the exposure."
-                else:
-                    return ""
-
-            def getOcclusion (foreheadOcclusion):
-                if foreheadOcclusion:
-                    return "The subject's forehead is occluded. Please angle the camera down."
-                else:
-                    return ""
+        for i in range(len(analysis)):
+            age = str(int(analysis[i]['faceAttributes']['age']))
+            gender = analysis[i]['faceAttributes']['gender']
+            emotions = analysis[i]['faceAttributes']['emotion']
+            emotion = max(emotions.items(), key=operator.itemgetter(1))[0]
+            exposure_state = analysis[i]['faceAttributes']['exposure']['exposureLevel']
+            foreheadOcclusion = analysis[i]['faceAttributes']['occlusion']['foreheadOccluded']
 
             age_gender = getAgeGender(age, gender)
-            exposure_descr = print(getExposureDescription (exposure_state))
-            occlusion_descr = print(getOcclusion (foreheadOcclusion))
+            exposure_descr = getExposureDescription(exposure_state)
+            occlusion_descr = getOcclusion(foreheadOcclusion)
+            emotion_descr = getEmotion(emotion)
 
-            description = ' '.join([age_gender, exposure_descr, occlusion_descr])
-        except:
-            pass
+            description += ' '.join([age_gender, emotion_descr, exposure_descr, occlusion_descr])
 
-        output = {'_result': description, 'confidence': confidence, 'response': analysis}
-        # print(json.dumps(response.json()))
+        output = {'_result': description, 'response': analysis, 'confidence': confidence}
+        # print(json.dumps(analysis))
 
         return output

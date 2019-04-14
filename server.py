@@ -32,14 +32,17 @@ def start():
     if request.args["caption"] == 'true':
         captionData = captionImage(image)
         result['_result'] += captionData['_result']
-    if request.args["faces"] == 'true':
-        facesData = detectEmotion(image)
-        if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
-            result['_result'] += facesData['_result']
-            result['faceResponse'] = facesData['response']
-    if request.args["ocr"] == 'true':
-        textData = extractText(image2)
-        result['_result'] += textData['_result']
+    try:
+        if request.args["faces"] == 'true':
+            facesData = detectEmotion(image)
+            if facesData['confidence'] >= FACE_CONFIDENCE_THRESHOLD:
+                result['_result'] += facesData['_result']
+                result['faceResponse'] = facesData['response']
+        if request.args["ocr"] == 'true':
+            textData = extractText(image2)
+            result['_result'] += textData['_result']
+    except:
+        pass
     return jsonify(result)
 
     # TODO: if faces of a certain confidence, append to result
