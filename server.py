@@ -20,7 +20,7 @@ def start():
     FACE_CONFIDENCE_THRESHOLD = 0
     try:
         image = request.files.get('image')
-        if request.args.get("test", "true") == 'true':
+        if request.args.get("test", "false") == 'true':
             return jsonify({"_result": "Test mode on. Server received your image!"})
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
