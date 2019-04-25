@@ -1,10 +1,10 @@
 import requests
 import json
+from secrets import subscription_key
 
 class CaptionImage:
     def __init__(self, image):
         # Subscription Key for Computer Vision API
-        subscription_key = '9a801624fab842b8867b963ecc5f151f'
         assert subscription_key
 
         self.image = image

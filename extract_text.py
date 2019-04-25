@@ -1,12 +1,11 @@
 import requests
 import json
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from secrets import subscription_key
 
 class ExtractText:
     def __init__(self, image):
         # Subscription Key for Computer Vision API
-        subscription_key = 'b000344e5c6045f4988a50daeedf0b75'
         assert subscription_key
 
         self.image = image
